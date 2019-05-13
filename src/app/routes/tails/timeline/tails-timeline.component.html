@@ -1,0 +1,16 @@
+<div class="mt-3">
+
+  <art-updated-time time="{{updatedTime}}" isLoading="{{isLoading}}" (refreshClick)="getFlightDetailsByTails()">
+  </art-updated-time>
+  <span class="float-right removals-calender">
+    <art-date-picker [fromdate]="fromdates" [todate]="todates" [utcConversion]='true'
+      (selectedDates)="getSelectedDates($event)"></art-date-picker>
+  </span>
+</div>
+<art-section-title [sectionTitle]="['TIMELINE']"></art-section-title>
+<div [hidden]="isLoading" id="overview-timeline" #timeline></div>
+<art-loading [loading]="isLoading"></art-loading>
+<div *ngIf="isError" class="text-center">
+  No Records Found...
+</div>
+<art-action-toolbar [config]="actionToolBarConfig" (actionToolBarEvent)="getEvent($event);" [getSelectedRow]="actionToolBarConfig.enableAnalyze"></art-action-toolbar>

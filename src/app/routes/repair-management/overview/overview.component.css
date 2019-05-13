@@ -1,0 +1,35 @@
+.f-size-10{
+    font-size: 10px;
+}
+.repair-comments {
+    max-height: 90px;
+}
+.color-default{
+    color: #495057 !important;
+}
+
+.stepper-modal-content-scroll {
+    max-height: 48vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+ }
+
+
+.stepper-modal-content {
+    max-height: 60vh;
+    overflow-y: none;
+    overflow-x: hidden;
+ }
+
+.stepper-form-content {
+    padding: 0 24px 24px 24px !important;
+}
+
+/deep/ .mat-horizontal-stepper-header-container {
+    padding-right: 48px !important;
+    padding-left: 48px !important;
+}
+
+.cursor-default {
+    cursor: default !important;
+}

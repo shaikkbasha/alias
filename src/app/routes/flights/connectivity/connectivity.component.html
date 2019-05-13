@@ -1,0 +1,15 @@
+<art-flight-details [flightDetails]="flightDetails" [componentId]="['connectivity']" ></art-flight-details>
+
+<div class="clearfix p-3"></div>
+
+<art-section-title [sectionTitle]="['EVENTS TIMELINE']"></art-section-title>
+
+<div class="row">
+    <art-loading [loading]="isLoading"></art-loading>
+  <div *ngIf="isError" class="col-12 text-center">
+      No Records Found..
+  </div>
+  <div [hidden]="isLoading" id="timeline" class="col-12" #timeline></div>
+</div>
+
+<art-action-toolbar [config]="actionToolBarConfig" ></art-action-toolbar>

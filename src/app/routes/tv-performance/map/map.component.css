@@ -1,0 +1,14 @@
+.modal-body {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  line-height: 2 !important;
+}
+
+.modal-open {
+  position: fixed !important;
+  overflow: hidden !important;
+}
+
+.badge {
+  line-height: 1.5 !important;
+}

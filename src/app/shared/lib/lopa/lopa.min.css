@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif; }
+
+input {
+  outline: none; }
+  input:focus, input:hover {
+    outline: none; }
+
+/**Seat Colors**/
+/* End */
+.lopa-container {
+  display: flex;
+  background: #fff;
+  position: relative; }
+  .lopa-container .deck-wrapper .deck-name {
+    text-transform: uppercase;
+    margin-left: 60px;
+    font-size: 10px;
+    height: 30px;
+    padding: 10px;
+    text-align: center;
+    color: #000;
+    background: #d2eeff;
+    border: 1px solid #cdcdcd;
+    border-radius: 10px; }
+  .lopa-container .deck-wrapper .lopa-cabin-name {
+    position: relative; }
+    .lopa-container .deck-wrapper .lopa-cabin-name .cabin-class-name {
+      position: absolute;
+      bottom: -35px;
+      left: 0%;
+      background: #4399f3;
+      color: #fff;
+      padding: 10px 5px;
+      font-size: 10px;
+      border-radius: 5px;
+      width: 130px;
+      text-align: center; }
+      .lopa-container .deck-wrapper .lopa-cabin-name .cabin-class-name:after {
+        top: 75%;
+        left: 49%;
+        content: " ";
+        height: 15px;
+        width: 15px;
+        position: absolute;
+        background: #4399f3;
+        transform: rotate(45deg);
+        z-index: -10; }
+  .lopa-container .deck-wrapper svg path {
+    cursor: pointer; }
+    .lopa-container .deck-wrapper svg path.red {
+      fill: #ff5b6f; }
+      .lopa-container .deck-wrapper svg path.red:hover {
+        fill: #9c2c39; }
+    .lopa-container .deck-wrapper svg path.yellow {
+      fill: #ffcc77; }
+      .lopa-container .deck-wrapper svg path.yellow:hover {
+        fill: #b3802c; }
+    .lopa-container .deck-wrapper svg path.selected {
+      fill: #2eb82e !important;
+      stroke: #145214 !important;
+      stroke-width: 2; }
+      .lopa-container .deck-wrapper svg path.selected:hover {
+        fill: #1f7a1f; }
+    .lopa-container .deck-wrapper svg path.element-hover {
+      fill: #a0a0a0 !important; }
+  .lopa-container .deck-wrapper svg textPath {
+    fill: #fff;
+    cursor: pointer; }
+
+.lopa-tooltip {
+  line-height: 1;
+  padding: 6px;
+  background: #fff;
+  color: #253746;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap !important;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2); }
+  .lopa-tooltip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: #fff;
+    content: "\25BC";
+    position: absolute;
+    text-align: center; }
+  .lopa-tooltip:before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2); }
+  .lopa-tooltip.n:after {
+    margin: -2px 0 0 0;
+    top: 100%;
+    left: 0; }
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzdHlsZS5jc3MiLCJzb3VyY2VSb290IjoiIn0=*/

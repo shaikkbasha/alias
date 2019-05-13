@@ -1,0 +1,93 @@
+<div class="object-header">
+  <div class="row p-4 text-center">
+    <div class="col-12">
+      <h6 style="display: inline; font-weight: 700">
+        <img alt="Tail" class="mr-3" src="./assets/objects/airline-modal.png" width="32px" height="32px"
+          style="vertical-align: sub; margin-right: 5px">
+        <span>{{tailNumber || 'Loading...'}}
+          <span class="fa fa-chevron-down" *ngIf="tailNumber" (click)="modalHandler()"></span>
+        </span>
+      </h6>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col-12">
+      <div class="btn-group active" role="group" *ngIf="currentAirlineId != null || currentAirlineId != undefined">
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w"
+          [routerLink]="['/airlines', currentAirlineId, 'tails', tailNumber, 'overview']"
+          [class.active]="isActive(['airlines', currentAirlineId, 'tails', tailNumber, 'overview'])"
+          id="btn-tail-overview">
+          Overview
+        </button>
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w"
+          [routerLink]="['/airlines', currentAirlineId, 'tails', tailNumber, 'timeline']"
+          [class.active]="isActive(['airlines', currentAirlineId, 'tails', tailNumber, 'timeline'])"
+          id="btn-tail-timeline">
+          Timeline
+        </button>
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w"
+          [routerLink]="['/airlines', currentAirlineId, 'tails',tailNumber, 'flight-legs' ]"
+          [class.active]="isActive(['airlines', currentAirlineId, 'tails', tailNumber, 'flight-legs'])"
+          id="btn-tail-flights">
+          Flight Legs </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-area">
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #tailsModal let-modal class="modal">
+  <div class="modal-header text-center">
+    <h6 class="w-100 modal-title text-center" id="modal-basic-title" ngbAutofocus>Select Tail</h6>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click'); resetTails()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body focused-object-selection-modal">
+    <div class="col-12 col-md-12 col-sm-12 col-xs-12 mb-3 search-block" *ngIf="tailsList.length">
+      <input class="form-control modal-search-box" type="text" id="inp-tails-select-tail" #tailSearch
+        (keyup)="filterTail($event.target.value)" placeholder="Search Tails...">
+        {{tailSearch.focus()}}
+    </div>
+    <section *ngIf="tailsList.length && !isLoading" class="selection-block">
+      <table mat-table #rsSort="matSort" [dataSource]="dataSource" matSort matSort matSortActive="tailSign"
+        matSortDirection="asc" class="col-12" id="tbl-airline-tails">
+
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+              (change)="selectedRow(selection.selected);$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="tailNumber">
+          <th *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.tailNumber}}
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row);selectedRow(selection.selected);"></tr>
+      </table>
+      <div *ngIf="!isLoading && !dataSource.filteredData.length" class="text-center col-12">
+        No Records Found...
+      </div>
+    </section>
+    <art-loading [loading]="isLoading"></art-loading>
+
+
+  </div>
+  <div class="modal-footer focused-object-modal-footer text-center">
+    <button class="btn btn-secondary art-button" id="cancel" type="button"
+      (click)="modal.dismiss('Cross click'); resetTails()"> Close </button>
+    <button class="btn btn-primary art-button" id="btn-airline-save" [disabled]="!selectedTail" type="button"
+      (click)="navigateToTail(); selectedTail ? modal.dismiss('Cross click') : null"> Apply </button>
+  </div>
+</ng-template>

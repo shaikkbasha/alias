@@ -1,0 +1,413 @@
+<!-- On click of particular airline, user will be navigated to the tab which has tail and configuration -->
+<div *ngIf="isLoading" id="airline-configuration-page">
+
+  <div class="mt-3">
+    <i [routerLink]="['/admin/airlines']" id="airline-configuration-back"
+      class="fa fa-arrow-left fa-lg cursor-pointer valign refresh-icon" aria-hidden="true"></i>
+    <h6 class="home-airline-label">{{currentAirline.name}}</h6>
+  </div>
+
+  <mat-tab-group id="admin-airline-tab" (selectedTabChange)="tabChange($event)">
+    <!--Tails tab-->
+    <mat-tab label="Tails" id="admin-airline-tail-tab"> Tails </mat-tab>
+    <!--end of Tails tab-->
+    <!--Configurations tab-->
+    <mat-tab label="Configurations" id="admin-airline-configuration-tab">
+
+      <div class="mt-3">
+        <art-updated-time time="{{updatedTime}}" isLoading="{{isLoadingConfiguration}}"
+          (refreshClick)="getConfigrationByIcao(currentAirline.icao)">
+        </art-updated-time>
+      </div>
+
+      <div>
+        <table mat-table [dataSource]="configurationDataSource" #configurationSort="matSort" matSort
+          matSortActive="configurationName" matSortDirection="asc" id="tbl-admin-airline-configurations" class="col-12">
+
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox [disableRipple]="true" (click)="$event.stopPropagation()"
+                (change)="selectedRow(selection.selected);$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- configurationName Column -->
+          <ng-container matColumnDef="configurationName">
+            <th mat-header-cell width="45%" *matHeaderCellDef mat-sort-header>NAME </th>
+            <td mat-cell *matCellDef="let row"> {{row.configurationName}} </td>
+          </ng-container>
+
+          <!--SEATS DATA column-->
+          <ng-container matColumnDef="hasSeatsUploaded">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SEATS DATA</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.hasSeatsUploaded == true">
+                <i class="fa fa-check-circle fa-lg repaired-success" *ngIf="row.hasSeatsUploaded == true"> </i>
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- createdDate Column -->
+          <ng-container matColumnDef="createdDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DATE CREATED (UTC) </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.createdDate!=null; else NullCreatedDate">
+                {{row.createdDate}}
+              </span>
+
+              <ng-template #NullCreatedDate>
+                --
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <!-- updatedDate Column -->
+          <ng-container matColumnDef="updatedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DATE UPDATED (UTC) </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.updatedDate!=null; else NullUpdatedDate">
+                {{row.updatedDate}}
+              </span>
+
+              <ng-template #NullUpdatedDate>
+                --
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="configurationDisplayColumn"></tr>
+          <tr mat-row *matRowDef="let row; columns: configurationDisplayColumn;"
+            (click)="selection.toggle(row); selectedRow(selection.selected)">
+          </tr>
+        </table>
+        <art-loading [loading]="isLoadingConfiguration"></art-loading>
+        <mat-card *ngIf="!isLoadingConfiguration && !configurationDataSource.filteredData.length" class="text-center">
+          No Records Found..
+        </mat-card>
+        <mat-paginator #configurationPaginator [length]="configurationDataSource.data.length" [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+    </mat-tab>
+    <!--end of Configurations tab-->
+
+    <!--Issues tab-->
+    <mat-tab label="Issues" id="admin-airline-issues-tab">
+
+      <div class="mt-3">
+        <art-updated-time time="{{updatedTime}}" isLoading="{{isIssueLoading}}"
+          (refreshClick)="getIssues(currentAirline.icao)">
+        </art-updated-time>
+      </div>
+
+      <table mat-table [dataSource]="issueDataSource" #issueSort="matSort" matSort matSortActive="name"
+        matSortDirection="asc" id="tbl-admin-airline-issue" class="col-12">
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NAME </th>
+          <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
+
+        <!-- description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DESCRIPTION </th>
+          <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+        </ng-container>
+
+        <!-- fixExists Column -->
+        <ng-container matColumnDef="fixExists">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> FIX EXISTS </th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{row.fixExists}} -->
+            <span *ngIf="row.fixExists == true" class="badge badge-secondary" id="spn-admin-airlineissue-yes">
+              YES
+            </span>
+            <span *ngIf="row.fixExists == false" class="badge badge-secondary" id="spn-admin-airlineissue-no">
+              NO
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+          <td mat-cell *matCellDef="let row"> {{row.status | titlecase}} </td>
+        </ng-container>
+
+        <!-- createdDate Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DATE CREATED (UTC) </th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.createdAt!=null; else NullIssueCreatedAt">
+              {{row.createdAt}}
+            </span>
+
+            <ng-template #NullIssueCreatedAt>
+              --
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- updatedDate Column -->
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DATE UPDATED (UTC) </th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.updatedAt!=null; else NullIssueUpdatedAt">
+              {{row.updatedAt}}
+            </span>
+
+            <ng-template #NullIssueUpdatedAt>
+              --
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- status Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ACTIONS </th>
+          <td mat-cell *matCellDef="let row">
+            <i (click)="editIssueAirline(row)" class="fa fa-pencil-square-o px-1 toolbar-search-icon cursor-pointer"
+              title="Edit" aria-hidden="true"></i>
+
+            <i (click)="deleteIssue(row)" class="fa fa-trash px-1 toolbar-search-icon cursor-pointer" title="Delete"
+              aria-hidden="true"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="issueDisplayColumn"></tr>
+        <tr mat-row *matRowDef="let row; columns: issueDisplayColumn;">
+        </tr>
+      </table>
+      <art-loading [loading]="isIssueLoading"></art-loading>
+      <mat-card *ngIf="!isIssueLoading && !issueDataSource.filteredData.length" class="text-center">
+        No Records Found..
+      </mat-card>
+      <mat-paginator #issuePaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+      </mat-paginator>
+
+    </mat-tab>
+    <!--end of Issues tab-->
+  </mat-tab-group>
+
+</div>
+
+
+<!-- Upload Airline Configuration Upload Modal -->
+<ng-template #configurationModal let-c="close" let-d="dismiss" class="modal">
+  <div class="modal-header">
+    <h6 id="cofiguration-modal-heading" class="w-100 modal-title text-center">Upload Seats Data
+    </h6>
+    <button type="button" id="configuration-header-close-btn" (click)="d('Cross click');removeFiles()" class="close"
+      aria-label="Close" [disabled]="uploader.queue.length > 0 && uploader.queue[0].isUploading">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+
+    <input #uploaderInput id="configuration-uploader-input" type="file" ng2FileSelect [uploader]="uploader"
+      style="display: none;" (change)="onFileUpload('')" />
+    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+      [uploader]="uploader" class="well my-drop-zone">
+      Drag file here...
+    </div>
+
+    <!-- List of files table-->
+    <table *ngIf="uploadConfigurationDataSource.length>0" mat-table id="tbl-configuration-upload"
+      [dataSource]="uploadConfigurationDataSource" class="col-12 table-gap">
+      <!--FILE NAME column-->
+      <ng-container matColumnDef="fileName">
+        <th mat-header-cell *matHeaderCellDef> FILE NAME </th>
+        <td mat-cell *matCellDef="let element"> {{ element.fileName }} </td>
+      </ng-container>
+
+      <!--PROGRESS column-->
+      <ng-container matColumnDef="fileProgress">
+        <th mat-header-cell *matHeaderCellDef> PROGRESS </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="progress mr-3">
+            <div class="custom-day focused progress progress-bar-info p-0 table-progress" role="progressbar"
+              [ngStyle]="{ 'width': element.fileProgress + '%' }">
+              {{element.fileProgress }}%
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!--STATUS column-->
+      <ng-container matColumnDef="fileStatus">
+        <th mat-header-cell *matHeaderCellDef>STATUS</th>
+        <td mat-cell *matCellDef="let element"> <span class="badge" [ngClass]="{
+                              'badge-success':element.fileStatus=== 'Success',
+                              'badge-danger': (element.fileStatus=== 'Cancel' || element.fileStatus === 'Error'),
+                              'badge-info' : element.fileStatus === 'Uploading'
+                              }" ngbTooltip="{{element.responseVal}}"> {{element.fileStatus }}</span>
+        </td>
+      </ng-container>
+
+      <!--ACTION column-->
+      <ng-container matColumnDef="fileReady">
+        <th mat-header-cell *matHeaderCellDef>ACTION</th>
+        <td mat-cell *matCellDef="let element">
+          <i class="fa fa-upload px-1 toolbar-search-icon cursor-pointer"
+            (click)="element.fileEvents.upload(element.fileEvents)" title="Upload"
+            *ngIf="(!element.fileEvents.isReady || !element.fileEvents.isUploading || !element.fileEvents.isSuccess) && element.fileStatus!=='Error'">
+          </i>
+
+          <i class="fa fa-ban px-1 toolbar-search-icon cursor-pointer"
+            (click)="element.fileEvents.cancel(element.fileEvents)" title="Cancel"
+            *ngIf="element.fileEvents.isUploading">
+          </i>
+          <i class="fa fa-trash px-1 toolbar-search-icon cursor-pointer"
+            (click)="element.fileEvents.remove(element.fileEvents);removeFiles(element.fileEvents.file?.name);"
+            title="Remove"></i>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="uploadConfigurationDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: uploadConfigurationDisplayedColumns;"></tr>
+
+    </table>
+
+  </div>
+  <div class="modal-footer form-group">
+    <button (click)="d('Cross click');removeFiles();" id="configuration-close-btn"
+      [disabled]="uploader.queue.length > 0 && uploader.queue[0].isUploading"
+      class="btn btn-light art-button ml-4">Close</button>
+  </div>
+</ng-template>
+<!--End of Upload Airline Configuration Upload Modal -->
+
+
+<!--Create, Update, Delete Issue Modal-->
+<ng-template #issueModal let-c="close" let-d="dismiss" class="modal">
+  <div *ngIf="!airLineDetailObj.enableDelete">
+    <div class="modal-header">
+      <h6 *ngIf="!airLineDetailObj.formObj.value.id" class="w-100 modal-title text-center">Create Issue</h6>
+      <h6 *ngIf="airLineDetailObj.formObj.value.id" class="w-100 modal-title text-center">Update Issue</h6>
+      <button type="button" [disabled]="airLineDetailObj.isFormSubmitted" id="btn-issue-close" class="close"
+        aria-label="Close" (click)="d('Cross click');resetIssueFormData();">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form [formGroup]="airLineDetailObj.formObj" (ngSubmit)="airlineIssueFormSubmit()">
+      <div class="modal-body">
+        <div class="alert alert-danger" *ngIf="airLineDetailObj.formObj.isError">
+          <a (click)='airLineDetailObj.formObj.isError = false' class="close" data-dismiss="alert">&times;</a>
+          <span *ngIf="airLineDetailObj.formObj.errorMsg" id='error'>{{airLineDetailObj.formObj.errorMsg}}</span>
+        </div>
+        <div class="col-8 form-group p-0">
+          <label class="mandatory-field" id="lbl-admin-airline-issue-name">NAME</label>
+          <input type="text" id="inp-admin-airline-issue-name" ngbAutofocus formControlName="name" autofocus
+            class="form-control content-dark" autocomplete="off"
+            [ngClass]="{ 'invalid-feedback d-inline': (airLineDetailObj.formSubmitted || airLineDetailObj.formObj.controls.name.dirty) && airLineDetailObj.formObj.controls.name.errors }" />
+          <div *ngIf="airLineDetailObj.formSubmitted && airLineDetailObj.formObj.controls.name.errors"
+            class="invalid-feedback d-inline">
+            <div *ngIf="airLineDetailObj.formObj.controls.name.errors.required">Name is required</div>
+          </div>
+          <div
+            *ngIf="airLineDetailObj.formObj.controls.name.errors && airLineDetailObj.formObj.controls.name.errors.maxlength"
+            class="invalid-feedback d-inline">
+            Name must be below 60 characters
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="mandatory-field" id="lbl-admin-airline-issue-description">DESCRIPTION</label>
+          <input type="text" id="inp-admin-airline-issue-description" formControlName="description"
+            class="form-control content-dark" autocomplete="off"
+            [ngClass]="{ 'invalid-feedback d-inline': (airLineDetailObj.formSubmitted || airLineDetailObj.formObj.controls.description.dirty) && airLineDetailObj.formObj.controls.description.errors }" />
+          <div *ngIf="airLineDetailObj.formSubmitted && airLineDetailObj.formObj.controls.description.errors"
+            class="invalid-feedback d-inline">
+            <div *ngIf="airLineDetailObj.formObj.controls.description.errors.required">Description is required</div>
+          </div>
+          <div
+            *ngIf="airLineDetailObj.formObj.controls.description.errors && airLineDetailObj.formObj.controls.description.errors.maxlength"
+            class="invalid-feedback d-inline">
+            Description must be below 60 characters
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="form-group col-4 p-0">
+            <label class="mandatory-field col-12" id="lbl-admin-airline-issue-fixExists">FIX EXISTS</label>
+            <mat-radio-group name="fixExists" fxLayout="column" formControlName="fixExists">
+              <mat-radio-button [disableRipple]="true" *ngFor="let op of airLineDetailObj.radioList.fixExists"
+                [value]="op.value" [name]="op.name" class="removal-radio-btn p-3">
+                {{ op.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="form-group col-4 p-0">
+            <label class="mandatory-field col-12" id="lbl-admin-airline-issue-status">STATUS</label>
+            <mat-radio-group name="status" fxLayout="column" formControlName="status">
+              <mat-radio-button [disableRipple]="true" *ngFor="let op of airLineDetailObj.radioList.status"
+                [value]="op.value" [name]="op.name" class="removal-radio-btn p-3">
+                {{ op.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer form-group">
+        <button type="button" class="btn btn-secondary art-button" [disabled]="airLineDetailObj.isFormSubmitted"
+          id="cancel" (click)="c('Save click');resetIssueFormData();">Cancel</button>
+        <button *ngIf="!airLineDetailObj.formObj.value.id" type="submit" class="btn btn-primary art-button"
+          id="btn-issue-save" [disabled]="airLineDetailObj.isFormSubmitted">
+          <i *ngIf="airLineDetailObj.isFormSubmitted" class="fa fa-spinner fa-pulse fa-fw mr-1"></i>
+          Save issue
+        </button>
+        <button *ngIf="airLineDetailObj.formObj.value.id" type="submit" id="btn-issue-update"
+          class="btn btn-primary art-button" [disabled]="airLineDetailObj.isFormSubmitted">
+          <i *ngIf="airLineDetailObj.isFormSubmitted" class="fa fa-spinner fa-pulse fa-fw mr-1"></i>
+          Update issue
+        </button>
+      </div>
+    </form>
+  </div>
+  <!--- Delete Airline --->
+  <div *ngIf="airLineDetailObj.enableDelete">
+    <div class="modal-header">
+      <h6 class="modal-title w-100 text-center">Delete Issue</h6>
+      <button type="button" class="close" aria-label="Close" id="btn-airline-delete"
+        (click)="d('Cross click');airLineDetailObj.isError = false;" [disabled]="airLineDetailObj.isDeleted">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-md-4">
+      <div class="alert alert-danger" *ngIf="airLineDetailObj.isError">
+        <a (click)='airLineDetailObj.isError = false' class="close" data-dismiss="alert">&times;</a>
+        <span *ngIf="airLineDetailObj.errorMsg">{{airLineDetailObj.errorMsg}}</span>
+      </div>
+      <p class="text-center">Do you really want to delete this airline?</p>
+      <div class="text-center">
+        <div class="d-inline">
+          <button type="button" class="btn btn-secondary art-button" id="btn-arilines-close"
+            [disabled]="airLineDetailObj.isDeleted"
+            (click)="c('Save click');airLineDetailObj.isError = false;">Close</button>
+        </div>
+        <div ngbAutofocus class="d-inline">
+          <button class="btn btn-primary art-button ml-4" [disabled]="airLineDetailObj.isDeleted"
+            id="btn-issues-confirm" (click)="deleteIssueAirline()">
+            <i *ngIf="airLineDetailObj.isDeleted" class="fa fa-spinner fa-pulse fa-fw mr-1"></i>
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!--End of Create, Update, Delete Issue Modal-->
+
+
+<art-action-toolbar [config]="actionToolBarConfig" (actionToolBarEvent)="getEvent($event);"
+  (getSearchText)="searchfilter($event)" [getSelectedRow]="selection.selected">
+</art-action-toolbar>
+
+<art-loading [loading]="!isLoading"></art-loading>

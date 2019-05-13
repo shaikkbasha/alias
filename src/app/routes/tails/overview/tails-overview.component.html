@@ -1,0 +1,30 @@
+<div class="mt-3">
+
+  <art-updated-time time="{{updatedTime}}" isLoading="{{isLoading}}" (refreshClick)="refreshProcess()">
+  </art-updated-time>
+  <span class="float-right removals-calender">
+    <art-date-picker [fromdate]="fromdates" [todate]="todates" [utcConversion]='true'
+      (selectedDates)="getSelectedDates($event)"></art-date-picker>
+  </span>
+  <art-section-title [sectionTitle]="['KEY METRICS']" [hideHorizontalRule]="true"></art-section-title>
+  <section class="card-section">
+    <div class="col-12 col-md-6 col-lg-4">
+      <art-kpi-card [loading]="isLoading" [cardTitle]="['BITE Coverage']" [coverageData]="biteCoverageData"
+        [showTime]="false">
+      </art-kpi-card>
+    </div>
+  </section>
+
+</div>
+<art-section-title [sectionTitle]="['LOPA STATUS']"></art-section-title>
+<section class="mt-4">
+  <art-lopa *ngIf="lopaConf && lopaConf?.deckConfig && !isLoading; else lopaBlock" [config]="lopaConf" [options]="lopaOptions"></art-lopa>
+  <ng-template #lopaBlock>
+    <art-loading [loading]="isLoading"></art-loading>
+    <div *ngIf="lopaConf && !lopaConf?.deckConfig && !isLoading" class="text-center">
+      Configuration not found for this Tail.
+    </div>
+  </ng-template>
+</section>
+<art-configuration-details [tailDetails]="tailDetails" [componentId]="['configuration']"></art-configuration-details>
+<art-action-toolbar [config]="actionToolBarConfig" [getSelectedRow]="actionToolBarConfig.enableAnalyze"></art-action-toolbar>

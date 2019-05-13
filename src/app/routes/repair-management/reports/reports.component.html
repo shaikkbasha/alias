@@ -1,0 +1,82 @@
+
+<section>
+  <div class="row mt-3 col-12">
+      <div class="col-6">
+          <art-updated-time time="{{reports.updatedTime}}" isLoading="{{paretoChart.reasonOfRemoval.isLoading}}" (refreshClick)="getReportsList()">
+          </art-updated-time>
+      </div>
+    
+      <span class="repair-calender col-6">
+          <span class="float-right"> Last 3 months </span>
+      </span>
+    </div>
+    
+  <div class="col-12 row form-group mt-4 pt-4">
+
+    <div class="col-12 col-lg-3 col-sm-6 col-xs-12">
+      <label id='lb-lrutype'> LRU TYPE</label>
+      <select name="lruType" [(ngModel)]="lruType" id="sel-report-lruType" class="form-control"
+        (change)="getLRUName(lruType)">
+        <option value=''>--Select--</option>
+        <option *ngFor="let res of reports?.lruType" [value]="res.id">
+          {{res?.name}}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-12 col-lg-3 col-sm-6 col-xs-12">
+      <label id='lb-lruname'> LRU NAME</label>
+      <select name="lruName" [(ngModel)]="lruName" id="sel-report-lruName" class="form-control"
+        (change)="getPartNumber(lruName)" [attr.disabled]="reports.isLRUNameLoading? '': null">
+        <option value=''>--Select--</option>
+        <option *ngFor="let res of reports?.lruName" [value]="res.id">
+          {{res?.name}}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-12 col-lg-3 col-sm-6 col-xs-12">
+      <label id='lb-partnumber'> PART NUMBER</label>
+      <select name="partNumber" [(ngModel)]="partNumber" id="sel-report-partNumber" class="form-control"
+        [attr.disabled]="reports.isPartnumberLoading? '': null" (change)="getChartData(partNumber)">
+        <option value=''>--Select--</option>
+        <option *ngFor="let res of reports?.partNumber" [ngValue]="res">
+          {{res?.partNumber}}
+        </option>
+      </select>
+    </div>
+
+  </div>
+  
+    <div class="col-lg-12 mt-4 pt-4" >
+          <!-- Reasons of Removal Pareto -->
+          <art-kpi-card [cardTitle]="['Reasons of Removal Pareto']" [showTime]="false">
+            <div id="reason-removal-pareto-chart" class="report-pareto-chart" [chart]="paretoChart?.reasonOfRemoval?.chartOption" 
+            *ngIf="paretoChart.reasonOfRemoval.isChartLoaded && paretoChart.reasonOfRemoval.chartData.length"></div>
+
+            <div class="col-lg-12 text-center" *ngIf="!paretoChart.reasonOfRemoval.chartData.length && !paretoChart.reasonOfRemoval.isLoading">
+                No Records Found...
+            </div>
+        
+            <art-loading [loading]="paretoChart.reasonOfRemoval.isLoading"
+            *ngIf="paretoChart.reasonOfRemoval.isLoading"></art-loading>
+          </art-kpi-card>
+
+            <!-- Repair Actions Pareto -->
+            <div class="mt-4">
+              <art-kpi-card [cardTitle]="['Repair Actions Pareto']" [showTime]="false">
+                <div id="repair-actions-pareto-chart" class="report-pareto-chart" [chart]="paretoChart?.repairAction?.chartOption" 
+                *ngIf="paretoChart.repairAction.isChartLoaded && paretoChart.repairAction.chartData.length"></div>
+    
+                <div class="col-lg-12 text-center" *ngIf="!paretoChart.repairAction.chartData.length && !paretoChart.repairAction.isLoading">
+                    No Records Found...
+                </div>
+            
+                <art-loading [loading]="paretoChart.repairAction.isLoading"
+                *ngIf="paretoChart.repairAction.isLoading"></art-loading>
+              </art-kpi-card>
+            </div>
+    </div>
+    
+</section>
+<art-action-toolbar [config]="actionToolBarConfig"></art-action-toolbar>

@@ -1,0 +1,33 @@
+<div id="home-airlines">
+  <span>
+    <div>
+      <art-section-title [sectionTitle]="['MY AIRLINES']"></art-section-title>
+      <div *ngIf="(airlineList.length > 1)">
+      </div>
+        <div class="row">
+          <div *ngFor="let airline of airlineList | filter:searchairline; let i = index "
+          class="col-12 col-sm-6 col-md-4 col-xl-3 mt-3">
+            <a class="d-inline-block airline-parent" id="lnk-home-airline-{{airline.icao}}"
+            [routerLink]="['/airlines', airline.icao, 'overview']">
+              <span class="fa-stack airline-stack mt-3">
+                <span class="fa fa-circle fa-stack-2x airline-stack-color"></span>
+                <span class="fa fa-plane fa-stack-1x fa-inverse content-dark airline-stack-icon"></span>
+              </span>
+              <div class="pl-2 d-inline-block">
+                <span class="airline-label">
+                  {{airline.name}}
+                </span>
+                <br><span class="airline-label-inner"> {{ airline.icao }}</span></div>
+            </a>
+          </div>
+          <div
+          *ngIf="(!airlineList || (airlineList && !airlineList.length) || !(airlineList | filter:searchairline).length) && (!isLoading)">
+            <span>No Airline Found...</span>
+          </div>
+          <art-loading [loading]="isLoading"></art-loading>
+        </div>
+    </div>
+  </span>
+</div>
+
+<art-action-toolbar [config]="actionToolBarConfig" (getSearchText)=" searchairline = $event "></art-action-toolbar>

@@ -1,0 +1,17 @@
+<div class="mt-3">
+  <art-updated-time time="{{aloviewupdatedTime}}" isLoading="{{isLoadingOverView}}" (refreshClick)="getOverViewFlightLegsData()">
+  </art-updated-time>
+  <span class="float-right removals-calender">
+    <art-date-picker [fromdate]="overviewFromdate" [todate]="overviewTodate" [utcConversion]='true'
+      (selectedDates)="getSelDates($event)"></art-date-picker>
+  </span> 
+</div>
+<art-section-title></art-section-title>
+
+
+<div [hidden]="isLoadingOverView" id="aireline-overview-timeline" #timeline></div>
+<art-loading [loading]="isLoadingOverView"></art-loading>
+<div *ngIf="isError" class="text-center">
+  No Records Found...
+</div>
+<art-action-toolbar [config]="overViewToolBarConfig" (actionToolBarEvent)="overviewEvent($event);" [getSelectedRow]="overViewToolBarConfig.enableAnalyze"></art-action-toolbar>

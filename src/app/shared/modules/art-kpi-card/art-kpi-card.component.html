@@ -1,0 +1,47 @@
+<section class="card">
+  <div class="card-header">
+    <span class="card-title">{{cardTitle}}</span>
+    <span *ngIf="showTime" class="updated-time">
+      {{updatedTime}}
+    </span>
+  </div>
+  <div class="card-body">
+    <ng-content></ng-content>
+    <div *ngIf="coverageData && !loading && !noCoverageData" class="coverage-body">
+      <div class="coverage-details row">
+        <div class="col-6">
+          <label for="total-percentage">TOTAL PERCENTAGE</label>
+          <div id="total-percentage" [ngClass]="{'negative-kpi': coverageData.percentage < 90}">
+            <span
+              *ngIf="coverageData.percentage < 100; else fullCoverage">{{coverageData.percentage | number:'.1-1'}}</span>
+            <ng-template #fullCoverage>
+              <span>{{coverageData.percentage}}</span>
+            </ng-template>
+          </div>
+        </div>
+        <div class="col-6 progress-bar-block">
+          <ngb-progressbar [type]="coverageData.percentage < 90 ? 'danger' : 'success'"
+            [value]="coverageData.percentage" [max]="100"></ngb-progressbar>
+        </div>
+      </div>
+      <div class="flights row">
+        <div class="col-4">
+          <label for="total-percentage">FLIGHTS</label>
+          <div class="flights-count">{{coverageData.flights}}</div>
+        </div>
+        <div class="col-4">
+          <label for="total-percentage">MATCHING</label>
+          <div class="flights-count">{{coverageData.offloads}}</div>
+        </div>
+        <div class="col-4">
+          <label for="total-percentage">MISSING</label>
+          <div class="flights-count">{{coverageData.flights - coverageData.offloads}}</div>
+        </div>
+      </div>
+    </div>
+    <art-loading [loading]="loading && !noCoverageData"></art-loading>
+    <div class="text-center" *ngIf="!loading && noCoverageData">
+      No Records Found...
+    </div>
+  </div>
+</section>

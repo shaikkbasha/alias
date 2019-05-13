@@ -1,0 +1,46 @@
+<div>
+  <div class="row m-0">
+    <div
+      [ngClass]="{'filter-button-color' : (activeWidgetObj.activeWidget == i) ||(activeWidgetObj.isPressed == i),'filter-button-default-color': (activeWidgetObj.activeWidget != i && activeWidgetObj.isPressed != i), 'hover-activated-filter-button': (activeWidgetObj.activeWidget == i && activeWidgetObj.isHovered
+     == activeWidgetObj.activeWidget), 'selected-filter-button': (activeWidgetObj.activeWidget == i && activeWidgetObj.changeActivatedWidgetStyle == i),'selected-filter-button':(activeWidgetObj.activeWidget == i && activeWidgetObj.isPressed == activeWidgetObj.activeWidget)}"
+      class="cursor-pointer filter-button col-3" (click)="getActiveWidget(i, item)"
+      *ngFor="let item of filterData; let i = index" (mouseover)="activeWidgetObj.isHovered = i"
+      (mouseleave)="activeWidgetObj.isHovered = null;activeWidgetObj.changeActivatedWidgetStyle = null"
+      (mousedown)="activeWidgetObj.isPressed = i"
+      (mouseup)="activeWidgetObj.isPressed = null;activeWidgetObj.changeActivatedWidgetStyle = null"
+      id="{{item.filterValue}}-filter-btn">
+      <p
+        [ngClass]="{'filter-button-title text-uppercase ': activeWidgetObj.activeWidget == i,'filter-button-title-color text-uppercase':activeWidgetObj.activeWidget != i }">
+        {{item.title}}</p>
+      <h3>
+        <span *ngIf="(loadingStatus || item.count == null);then content else count_content"></span>
+        <ng-template #content>-</ng-template>
+        <ng-template #count_content>
+          <div class="pull-left" id="{{item.filterValue}}-value-btn">
+            {{item.count}}
+          </div>
+          <div class="filter-button-align-bottom" id="{{item.filterValue}}-percentage" *ngIf="(alloffloadcount!=0) && i>0 && item.filterRule === 'yes' ">
+           <span class="fa-stack" >
+              <i class="fa fa-circle" [ngClass]="{
+            'color-red':item.count /alloffloadcount * 100 > 20,
+            'color-orange':item.count /alloffloadcount  * 100 > 10 && item.count /alloffloadcount  * 100 <= 20,
+            'color-green':item.count /alloffloadcount * 100 <= 10
+            }"></i>
+            </span> {{item.count /alloffloadcount * 100 | number:'.1-1'}}%
+          </div>
+
+          <div  class="filter-button-align-bottom" id="{{item.filterValue}}-percentage" *ngIf="(alloffloadcount!=0) && i>0 && item.filterRule === 'no' ">
+            <span class="fa-stack">
+              <i class="fa fa-circle" [ngClass]="{
+            'color-green':item.count /alloffloadcount * 100 >= 90,
+            'color-orange':item.count /alloffloadcount  * 100 >= 80 && item.count /alloffloadcount  * 100 < 90,
+            'color-red':item.count /alloffloadcount * 100 < 80
+            }"></i>
+            </span> {{item.count /alloffloadcount * 100 | number:'.1-1'}}%
+          </div>
+
+        </ng-template>
+      </h3>
+    </div>
+  </div>
+</div>

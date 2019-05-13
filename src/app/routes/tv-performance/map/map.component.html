@@ -1,0 +1,57 @@
+<art-flight-details [flightDetails]="flightDetails" [componentId]="['tv-tuner']"></art-flight-details>
+<art-section-title [sectionTitle]="['MAP']"></art-section-title>
+<div class="mt-1">
+  <div id="map" class="map" #mapContainer></div>
+</div>
+<ng-template #geoDatails let-modal class="modal">
+  <div class="modal-header text-center">
+    <h6 class="w-100 modal-title text-center" id="modal-basic-title" ngbAutofocus>
+      {{geoData?.isIcon ? 'Airport Details' : 'Segment Details'}}
+    </h6>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <section *ngIf="geoData; else loading">
+      <ng-container *ngIf="geoData.isIcon">
+          <div> Airport Name :
+            <strong> {{geoData.data[geoData.type].name !== null ? geoData.data[geoData.type].name: 'N/A'}} </strong>
+          </div>
+          <div> Airport IATA/ICAO :
+            <strong> {{geoData.data[geoData.type].iata !== null ? geoData.data[geoData.type].iata: 'N/A'}} / {{geoData.data[geoData.type].icao !== null ? geoData.data[geoData.type].icao: 'N/A'}}  </strong>
+          </div>
+          <div> Expected RSSI :
+            <strong> {{geoData.data[geoData.type].expectedRssi !== null ? geoData.data[geoData.type].expectedRssi: 'N/A'}} </strong>
+          </div>
+          <div> Expected Azimuth : 
+            <strong> {{geoData.data[geoData.type].expectedAzimuth !== null ? geoData.data[geoData.type].expectedAzimuth : 'N/A'}} </strong>
+          </div>
+          <div> Expected Elevation : 
+            <strong> {{geoData.data[geoData.type].expectedElevation !== null ? geoData.data[geoData.type].expectedElevation : 'N/A'}} </strong>
+          </div> 
+      </ng-container>
+      <ng-container *ngIf="!geoData.isIcon">
+          <div> Timestamp (UTC) : <strong> {{geoData.timestamp | date: 'MM/dd/yyyy HH:mm:ss' : 'UTC'}}</strong></div>
+          <div> TV Service State : <strong><span class="pl-1 pb-1 badge" [ngClass]="{'badge-success': geoData['tvServiceState'] === 'AVAILABLE',
+          'badge-danger': geoData['tvServiceState'] !== 'AVAILABLE'}">{{geoData.tvServiceState}}</span></strong></div>
+          <div> RSSI : <strong> <span class="circle" [ngClass]="{'circle-danger': geoData['rssi'] >= 7.9 || geoData['rssi'] <= -17,
+          'circle-success': geoData['rssi'] <= 7.9 || (geoData['rssi'] >= -17) }">
+              </span> {{geoData.rssi}}</strong></div>
+          <div> Locked Tuner : <strong>
+              <span *ngIf="geoData['tunerLockStatus']; else badgeFailure" class="pl-1 pb-1 badge badge-success">YES</span>
+              <ng-template #badgeFailure><span class="pl-1 badge badge-danger">NO</span></ng-template>
+            </strong></div>
+          <div> BIT Flag : <strong> <span class="pl-1 pb-1 badge" [ngClass]="{'badge-success': geoData['bitFlag'] === 'fffe',
+          'badge-danger': geoData['bitFlag'] !== 'fffe'}">{{geoData.bitFlag}}</span></strong></div>
+      </ng-container>      
+    </section>
+    <ng-template #loading>
+      <section class="text-center">
+          <art-loading [loading]="true"></art-loading>
+      </section>
+    </ng-template>
+  </div>
+</ng-template>
+
+<art-action-toolbar></art-action-toolbar>

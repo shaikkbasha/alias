@@ -1,0 +1,80 @@
+/*KPI Card*/
+.card {
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  background-color: $white;
+  border-radius: 0 !important;
+
+  .card-header {
+    color: $white;
+    line-height: 1;
+    font-size: 13px;
+    background-color: $carbon-02;
+    border-radius: 0 !important;
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .updated-time {
+      opacity: 0.66;
+      float: right;
+    }
+  }
+
+  .card-body {
+    padding: 18px !important;
+
+    .coverage-details {
+      label {
+        margin: 0 !important;
+      }
+
+      #total-percentage {
+        color: $dark;
+        font-size: 60px;
+        font-weight: 700;
+      }
+
+      .negative-kpi {
+        color: $red !important;
+      }
+    }
+
+    .progress-bar-block {
+      transform: translateY(80%);
+      height: 50px;
+      margin-bottom: 20px;
+
+      .progress {
+        transform: translateY(100%);
+
+        .bg-success {
+          background-color: $green !important;
+        }
+
+        .bg-info {
+          background-color: $light-blue !important;
+        }
+
+        .bg-warning {
+          background-color: $orange !important;
+        }
+
+        .bg-danger {
+          background-color: $red !important;
+        }
+      }
+    }
+
+
+    .flights {
+      div {
+        .flights-count {
+          font-size: 21px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+<art-flight-details [flightDetails]="flightDetails" [componentId]="['tv-periodic-tuner']"></art-flight-details>
+<art-section-title [sectionTitle]="['PERIODIC TUNER STATUS']"></art-section-title>
+<ng-template #tooltipContent>
+  <p id="periodic-tuner-tooltip" [hidden]="isLoading" *ngIf="tooltipData && tooltipData['timestamp']">
+    <span class="col-lg-4">Timestamp (UTC)</span>: 
+    <strong class="col-lg-8">{{tooltipData['timestamp'] | date: 'MM/dd/yyyy HH:mm:ss' : 'UTC'}}</strong> <br/>
+    <span>Board #</span>: <strong>{{tooltipData['boardNumber']}}</strong> <br>
+    <span>Tuner #</span>: <strong>{{tooltipData['tunerNumber']}}</strong> <br>
+    <span class="col-lg-4">Authorized</span>: <strong class="col-lg-8">{{tooltipData['authorized']}}</strong> <br/>
+    <span>Paired</span>: <strong>{{tooltipData['paired']}}</strong> <br/>
+    <span>Channel Id</span>: <strong>{{tooltipData['channelId']}}</strong> <br/>
+    <span>Channel Number</span>: <strong>{{tooltipData['channelNumber']}}</strong> <br/>
+    <span>Transponder</span>: <strong>{{tooltipData['transponder']}}</strong> <br/>
+    <span>CNR</span>: <strong>{{tooltipData['cnr']}}</strong> <br/>
+    <span>AGC</span>: <strong>{{tooltipData['agc']}}</strong> <br>
+    <span>Lock Value</span>: <strong>{{tooltipData['lock'] | removeSplChar | titlecase}}</strong>
+  </p>
+  <art-loading [loading]="isLoading"></art-loading>
+</ng-template>
+<div class="mt-3" class="tv-sticky-table">
+  <table *ngIf="tableData?.length" id="periodic-tuner-status-table" class="table-borderless">
+    <thead>
+      <tr>
+        <th>
+          <div class="timeStamp"></div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 1</div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 2</div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 3</div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 4</div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 5</div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 6</div>
+        </th>
+        <th colspan="8">
+          <div class="text-center">BOARD 7</div>
+        </th>
+      </tr>
+      <tr class="tuner-header">
+        <th class="timeStampHeader" #timeStampCol> <div class="timeStamp">TIMESTAMP (UTC)</div> </th>
+        <th *ngFor="let col of tableData[0].data" [ngClass]="{'board-col': col !== 'timestamp', 'timeStampHeader': col === 'timestamp'}">
+          <div>{{col.tunerNumber}}</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of tableData">
+        <td> 
+          <div class="timeStampData"> {{data.timestamp | date: 'MM/dd/yyyy HH:mm:ss' : 'UTC'}}  </div> 
+        </td>
+        <td *ngFor="let col of data.data"> 
+          <div class="tuner-{{col.tunerNumber}} tuner-cell" id="{{'board-'+col.boardNumber+'-tuner-'+col.tunerNumber}}" [ngClass]="{'notUsed': col.status === 'not_used', 
+          'good': col.status === 'good', 'warning': col.status === 'warning',
+          'failure': col.status === 'failure'}" (click)="getPeriodicTunerDetails(data['timestamp'], col)"
+            *ngIf="col !== 'timestamp'; else timeStampDataCol" placement="top" triggers="click" 
+            [ngbTooltip]="tooltipContent"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<art-action-toolbar></art-action-toolbar>

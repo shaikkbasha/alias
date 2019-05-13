@@ -1,0 +1,101 @@
+<div class="object-header">
+  <div class="row p-4 text-center">
+    <div class="col-12">
+      <h6 style="display: inline; font-weight: 700">
+       <img class="mr-3" alt="Airline" src="./assets/objects/airline-modal.png" width="32px" height="32px" 
+       style="vertical-align: sub; margin-right: 5px">
+       <span>{{currentAirline || 'Loading...'}}</span>
+       <span *ngIf="currentAirline && hasAccessToSeveralAirlines" class="fa fa-chevron-down pl-2" (click)="modalHandler()"></span>
+      </h6>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col-12">
+      <div class="btn-group active" role="group" *ngIf="currentAirlineId != null || currentAirlineId != undefined">
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId, 'overview']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'overview'])" id="btn-airline-overiew">
+          Overview
+        </button>
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId, 'tails']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'tails'])" id="btn-airline-tails">
+          Tails</button>
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId, 'flights']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'flights'])" id="btn-airline-flights">
+          Flights
+        </button>
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId,'offloads']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'offloads'])" id="btn-payloads-offloads">
+          Offloads
+        </button>
+        <button type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId, 'coverage']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'coverage'])" id="btn-payloads-coverage">
+          Coverage
+        </button>
+        <button id="btn-airline-scores" type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId, 'scores']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'scores'])" *ngIf="enableTVperformance">
+         Scores
+        </button>
+        <button id="btn-tv-performance" type="button" class="btn btn-tab btn-sm btn-tab-m-w" [routerLink]="['/airlines', currentAirlineId, 'tv-performance']"
+          [class.active]="isAirlineActive(['airlines', currentAirlineId, 'tv-performance'])" *ngIf="enableTVperformance">
+          TV Performance
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-area">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Airline selection modal -->
+<ng-template #airlinesModal let-modal class="modal">
+  <div class="modal-header text-center">
+    <h6 class="w-100 modal-title text-center" id="modal-basic-title" ngbAutofocus>Select Airline</h6>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click'); resetModal();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body focused-object-selection-modal">
+    <div class="col-12 col-md-12 col-sm-12 col-xs-12 mb-3 search-block">
+      <input class="form-control modal-search-box" type="text" id="inp-airline-filter" autocomplete="off" #searchAirline
+        (keyup)="filterAirline($event.target.value)" placeholder="Search Airlines...">
+        {{searchAirline.focus()}}
+    </div>
+    <section class="selection-block">
+      <table mat-table [dataSource]="dataSource" 
+        class="col-12" id="tbl-airline-tails">
+
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+              (change)="selectedRow(selection.selected);$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="airlineName">
+          <th *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.airlineName}} <span *ngIf="element.airlineIcao">({{element.airlineIcao}})</span>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row);selectedRow(selection.selected);"></tr>
+      </table>
+      <div *ngIf="!dataSource.filteredData.length" class="text-center col-12">
+        No Records Found...
+      </div>
+    </section>
+    <art-loading [loading]="isLoading"></art-loading>
+  </div>
+  <div class="modal-footer focused-object-modal-footer text-center">
+    <button class="btn btn-secondary art-button" id="cancel" type="button"
+      (click)="modal.dismiss('Cross click'); resetModal();">Close</button>
+    <button class="btn btn-primary art-button" id="btn-focusedObj-airline-apply" type="button"
+      (click)="navigateToAirline(); modal.dismiss('Cross click'); resetModal();" [disabled]="!selectedIcao"> Apply </button>
+  </div>
+</ng-template>

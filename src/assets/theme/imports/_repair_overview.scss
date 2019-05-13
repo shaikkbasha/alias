@@ -1,0 +1,47 @@
+.btn-group {
+  .active-btn {
+    color: $white !important;
+    background-color: $light-blue !important;
+  }
+
+  &.active-btn:hover {
+    background-color: $blue-grey !important;
+  }
+}
+
+.btn-group {
+  label {
+    border-color: $dark !important;
+    background-color: $light-grey-02 !important;
+
+    &.active:hover {
+      background-color: $blue-grey !important;
+    }
+
+    &.active-mouse-down {
+      color: $white !important;
+      background-color: $dark-grey !important;
+    }
+
+    &.inactive-mouse-down:not(.active) {
+      color: $white !important;
+      background-color: $light-blue !important;
+    }
+  }
+}
+
+.removal-mod-dot {
+  .btn-toolbar {
+    .btn-group {
+      width: 100%;
+      label {
+        width: 6%;
+        text-align: center;
+        padding: 8px 0px;
+      }
+    }
+  }
+}
+.date-range-picker-color {
+  width: 15%;
+}

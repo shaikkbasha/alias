@@ -1,0 +1,102 @@
+<art-flight-details [flightDetails]="flightDetails" [componentId]="['flight-overview']"></art-flight-details>
+<div class="clearfix p-3"></div>
+<art-section-title [sectionTitle]="['STATUSES']"></art-section-title>
+<art-loading [loading]="isLoading"></art-loading>
+<div [hidden]="isLoading" class="row">
+  <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+    <span class="fa-stack fa-2x" id="spn-flight-sys-event">
+      <i class="fa fa-circle fa-stack-2x" [ngClass]="{
+          'color-green':flightStatus.systemResetStatus === 'ok',
+          'color-red':flightStatus.systemResetStatus === 'ko',
+          'color-grey':flightStatus.systemResetStatus === 'none',
+          'color-orange':flightStatus.systemResetStatus === 'warning'
+          }"></i>
+      <i class="fa fa-power-off fa-stack-1x fa-inverse" [ngClass]="{
+        'content-dark':flightStatus.systemResetStatus === 'none'
+        }"></i>
+    </span>
+    <div class="container">
+      <label id="lbl-system-reset">
+        SYSTEM RESET
+      </label>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+    <span class="fa-stack fa-2x" id="spn-flight-head-end">
+      <i class="fa fa-circle fa-stack-2x" [ngClass]="{
+        'color-green':flightStatus.headEndStatus === 'ok',
+        'color-red':flightStatus.headEndStatus === 'ko',
+        'color-grey':flightStatus.headEndStatus === 'none',
+        'color-orange':flightStatus.headEndStatus === 'warning'
+        }"></i>
+      <i class="fa fa-server fa-stack-1x fa-inverse" [ngClass]="{
+        'content-dark':flightStatus.headEndStatus === 'none'
+        }"></i>
+    </span>
+    <div class="container">
+      <label id="lbl-head-end">HEAD END
+      </label>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+    <span class="fa-stack fa-2x" id="spn-flight-first-class">
+      <i class="fa fa-circle fa-stack-2x" [ngClass]="{
+      'color-green':flightStatus.firstClassStatus === 'ok',
+      'color-red':flightStatus.firstClassStatus === 'ko',
+      'color-grey':flightStatus.firstClassStatus === 'none',
+      'color-orange':flightStatus.firstClassStatus === 'warning'
+      }"></i>
+      <i class="fa fa-user fa-stack-1x fa-inverse" [ngClass]="{
+        'content-dark':flightStatus.firstClassStatus === 'none'
+        }"></i>
+    </span>
+    <div class="container">
+      <label id="lbl-first-class">FIRST CLASS
+      </label>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+    <span class="fa-stack fa-2x" id="spn-flight-business-class">
+      <i class="fa fa-circle fa-stack-2x" [ngClass]="{
+      'color-green':flightStatus.businessClassStatus === 'ok',
+      'color-red':flightStatus.businessClassStatus === 'ko',
+      'color-grey':flightStatus.businessClassStatus === 'none',
+      'color-orange':flightStatus.businessClassStatus === 'warning'
+      }"></i>
+      <i class="fa fa-user fa-stack-1x fa-inverse" [ngClass]="{
+        'content-dark':flightStatus.businessClassStatus === 'none'
+        }"></i>
+    </span>
+    <div class="container">
+      <label id="lbl-business-class">BUSINESS CLASS
+      </label>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+    <span class="fa-stack fa-2x" id="spn-flight-economy-class">
+      <i class="fa fa-circle fa-stack-2x" [ngClass]="{
+      'color-green':flightStatus.economyClassStatus === 'ok',
+      'color-red':flightStatus.economyClassStatus === 'ko',
+      'color-grey':flightStatus.economyClassStatus === 'none',
+      'color-orange':flightStatus.economyClassStatus === 'warning'
+      }"></i>
+      <i class="fa fa-user fa-stack-1x fa-inverse" [ngClass]="{
+        'content-dark':flightStatus.economyClassStatus === 'none'
+        }"></i>
+    </span>
+    <div class="container">
+      <label id="lbl-economy-class">ECONOMY CLASS
+      </label>
+    </div>
+  </div>
+</div>
+<div class="clearfix p-3"></div>
+<art-section-title [sectionTitle]="['TIMELINE']"></art-section-title>
+<div class="row">
+    <art-loading [loading]="isLoading"></art-loading>
+  <div *ngIf="isError" class="col-12 text-center">
+    No Records Found..
+  </div>
+  <div [hidden]="isLoading" id="overview-timeline" class="col-12" #timeline></div>
+</div>
+<art-action-toolbar [config]="actionToolBarConfig"></art-action-toolbar>

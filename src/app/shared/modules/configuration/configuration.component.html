@@ -1,0 +1,37 @@
+<art-section-title [sectionTitle]="['CONFIGURATION']"></art-section-title>
+<div class="row mt-4">
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-aircraftType' label='AIRCRAFT TYPE' value='{{tailDetails?.type}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-aircraftConfig' label='AIRCRAFT CONFIG' value='{{tailDetails?.acConfiguration}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-msn' label='MSN' value='{{tailDetails?.msn}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-eis' label='EIS' value='{{tailDetails?.eis}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-platform' label='PLATFORM' value='{{tailDetails?.platform}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-sw-baseline' label='SW BASELINE' value='{{tailDetails?.swBaseline}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-sw-version' label='SW VERSION' value='{{tailDetails?.software}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+    <art-label-value id='lbl-{{componentId}}-sw-part-number' label='SW PART NUMBER' value='{{tailDetails?.swPartNo}}'></art-label-value>
+  </div>
+  <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+      <art-label-value id='lbl-{{componentId}}-sw-installed-date' label='SW INSTALLED DATE' [format]="tailDetails?.dateFormat"
+        value='{{tailDetails?.swInstalled}}'></art-label-value>
+    </div>
+    <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+      <art-label-value id='lbl-{{componentId}}-map-version' label='MAP VERSION' value='{{tailDetails?.mapVersion}}'></art-label-value>
+    </div>
+    <div class="mb-2 col-6 col-sm-4 col-md-3 col-xl-2">
+      <art-label-value id='lbl-{{componentId}}-content' label='CONTENT' value='{{tailDetails?.content}}'></art-label-value>
+    </div>
+</div>

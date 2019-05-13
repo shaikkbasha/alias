@@ -1,0 +1,56 @@
+.focus-object {
+  font-size: 18px !important;
+}
+
+.focus-object-plate {
+  color: $light-blue !important;
+}
+
+.focus-object-plate-icon {
+  color: $dark-blue !important;
+}
+
+h6 .fa-chevron-down {
+  font-size: 16px;
+  cursor: pointer;
+  transform: translateY(-3px);
+  color: $light-blue;
+}
+
+.focused-object-selection-modal {
+  max-height: 53vh !important;
+  padding: 24px 0 !important;
+  overflow: hidden !important;
+
+  .search-block,
+  .selection-block {
+    padding: 0px 24px !important;
+  }
+
+  .selection-block {
+    max-height: 37vh !important;
+    overflow-y: auto;
+
+    div.text-center {
+      font-size: 13px;
+    }
+
+    .mat-column-select {
+      flex: 0 0 40px !important;
+      width: 15% !important;
+    }
+
+    .mat-column-airlineName {
+      cursor: pointer !important;
+    }
+
+    .mat-column-tailNumber {
+      cursor: pointer !important;
+    }
+  }
+}
+
+.focused-object-modal-footer {
+  display: unset !important;
+  justify-content: unset !important;
+}

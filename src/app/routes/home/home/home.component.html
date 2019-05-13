@@ -1,0 +1,63 @@
+<div class="content-area">
+  <h4 id="home-welcome-title" *ngIf="isUserAuthenticated && userDetails">Welcome, {{ userDetails.firstName }}!</h4>
+  <hr><br>
+  <span>
+    <div class="row">
+      <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+        <a id="lnk-home-upload" [routerLink]="['/upload']">
+          <span class="fa-stack fa-4x home-icon" id="spn-home-upload">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-cloud-upload fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+        <div class="container">
+          <label id="lbl-upload">
+            UPLOAD
+          </label>
+        </div>
+      </div>
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center" *ngIf="enableRepairModule">
+          <a id="lnk-home-reparis" [routerLink]="['/repair-management/overview']">
+            <span class="fa-stack fa-4x home-icon" id="spn-home-repairs">
+              <i class="fa fa-circle fa-stack-2x"></i>
+              <i class="fa fa-wrench fa-stack-1x fa-inverse"></i>
+            </span>
+          </a>
+          <div class="container">
+            <label id="lbl-repairs">
+              REPAIR MANAGEMENT
+            </label>
+          </div>
+        </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center">
+        <a id="lnk-home-profile" [routerLink]="['/profile']">
+          <span class="fa-stack fa-4x home-icon" id="spn-home-profile">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+        <div class="container">
+          <label id="lbl-profile">
+            PROFILE
+          </label>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-xl-2 text-center" *userHasAnyAuthority="'admins'">
+        <a id="lnk-home-admin" [routerLink]="['/admin']">
+          <span class="fa-stack fa-4x home-icon" id="spn-home-admin">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-gear fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+        <div class="container">
+          <label id="lbl-admin">
+            ADMIN
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <app-airlines></app-airlines>
+  </span>
+</div>

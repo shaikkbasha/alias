@@ -1,0 +1,7 @@
+a.lnk-airline {
+  color: #5dbfd4 !important;
+}
+
+a.lnk-airline:hover {
+  text-decoration: underline !important;
+}
